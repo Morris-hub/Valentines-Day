@@ -12,7 +12,7 @@
   }
   .button-container {
     text-align: center;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -58,9 +58,43 @@
   #noButton{
     background-color: red;
   }
+
+  .access-container {
+    text-align: center;
+  }
+  .btn, .access-btn {
+    display: inline-block;
+    padding: 10px 30px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #c1c0c0;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #d6d3d3;
+    transition: transform 0.2s;
+  }
+  .btn:hover, .access-btn:hover {background-color: #3e8e41}
+  .btn:active, .access-btn:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
 </style>
 </head>
 <body>
+
+
+  <div class="access-container">
+    <h2>Enter Access Code</h2>
+    <input type="text" id="accessCode" placeholder="4-digit code" maxlength="4">
+    <button class="access-btn" onclick="checkCode()">Submit</button>
+  </div>
+
 
 <div class="button-container">
   <h1 id="headline"> Will you be my Valentine, Zou? </h1>
@@ -120,6 +154,17 @@
     roseBear.style.display = "block";
 
     document.getElementById('rose_bear').src = "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif";
+  }
+
+
+  function checkCode() {
+    var code = document.getElementById('accessCode').value;
+    if(code === "0510") { // Ersetzen Sie "1234" durch Ihren gewünschten 4-stelligen Code
+      document.querySelector('.button-container').style.display = 'flex';
+      document.querySelector('.access-container').style.display = 'none';
+    } else {
+      alert("Incorrect code!");
+    }
   }
 </script>
 
