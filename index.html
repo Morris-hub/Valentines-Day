@@ -46,16 +46,24 @@
     transform: translateY(4px);
   }
   #rose_bear {
-    width: 260px;
+    width: 270px;
     height: 250px;
     margin-bottom: 20px;
+  }
+
+  #yesButton{
+    background-color: #3e8e41;
+  }
+
+  #noButton{
+    background-color: red;
   }
 </style>
 </head>
 <body>
 
 <div class="button-container">
-  <h1> Will you be my Valentine? </h1>
+  <h1 id="headline"> Will you be my Valentine, Zou? </h1>
     <img id="rose_bear" src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Rose Bear">
     <div class="buttons">
         <button class="btn" id="yesButton">Yes</button>
@@ -64,17 +72,55 @@
 </div>
 
 <script>
-  var buttonTexts = ["No", "Are you sure?", "Really sure?", "Please think again", "Don't do this", "the Yes button is left", "Or...", "Yes 👀"];
+  var buttonTexts = ["No", "Oh, wrong button","Are you sure?", "Really sure?", "Please think again", "Don't do this", "the Yes button is left", "Or...", "Yes 👀"];
   var index = 0;
-  var scale = 1;
+  var scale = 2;
 
   document.getElementById('noButton').onclick = function() {
-    index = (index + 1) % buttonTexts.length;
+    index = (index + 1) ;
     this.textContent = buttonTexts[index];
+
+    if(index == 9){
+      YesEvent();
+    }
     
+    console.log(index);
     scale += 0.1; 
     document.getElementById('yesButton').style.transform = 'scale(' + scale + ')';
   };
+
+
+
+  document.getElementById('yesButton').onclick = function () {
+
+    var yesBtn = document.getElementById('yesButton');
+    var noBtn = document.getElementById('noButton');
+    var headline = document.getElementById('headline');
+    var roseBear = document.getElementById('rose_bear');
+
+    noBtn.style.display = "none";
+    yesBtn.style.display = "none";
+    headline.style.display ="none";
+    roseBear.style.display = "none";
+
+    YesEvent();
+  }
+
+
+  function YesEvent() {
+
+    var yesBtn = document.getElementById('yesButton');
+    var noBtn = document.getElementById('noButton');
+    var headline = document.getElementById('headline');
+    var roseBear = document.getElementById('rose_bear');
+
+    noBtn.style.display = "none";
+    yesBtn.style.display = "none";
+    headline.style.display ="none";
+    roseBear.style.display = "block";
+
+    document.getElementById('rose_bear').src = "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif";
+  }
 </script>
 
 </body>
