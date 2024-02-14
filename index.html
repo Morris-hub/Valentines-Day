@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button Text Änderung und Skalierung ohne Überlappung</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    background-color: #FCFCFC;
+  }
+  .button-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Ermöglicht das Umfließen der Buttons, falls der Platz nicht ausreicht */
+  }
+  .btn {
+    display: inline-block;
+    padding: 10px 30px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #c1c0c0;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #d6d3d3;
+    transition: transform 0.2s; /* Sanfte Transition für die Transformation */
+  }
+  .btn:hover {background-color: #3e8e41}
+  .btn:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+  #rose_bear {
+    width: 260px;
+    height: 250px;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="button-container">
+    <img id="rose_bear" src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Rose Bear">
+    <div class="buttons">
+        <button class="btn" id="yesButton">Yes</button>
+        <button class="btn" id="noButton">No</button>
+    </div>
+</div>
+
+<script>
+  var buttonTexts = ["No", "Are you sure?", "Really sure?", "Please think again", "Don't do this", "the Yes button is left", "Or...", "Yes 👀"];
+  var index = 0;
+  var scale = 1;
+
+  document.getElementById('noButton').onclick = function() {
+    index = (index + 1) % buttonTexts.length;
+    this.textContent = buttonTexts[index];
+    
+    scale += 0.1; 
+    document.getElementById('yesButton').style.transform = 'scale(' + scale + ')';
+  };
+</script>
+
+</body>
+</html>
