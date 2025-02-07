@@ -9,6 +9,7 @@
     height: 100%;
     margin: 0;
     background-color: #FCFCFC;
+    overflow: hidden; /* Verhindert Scrollen */
   }
   .button-container {
     text-align: center;
@@ -17,11 +18,12 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    position: relative; /* Damit die Herzen relativ zum Container positioniert werden */
   }
   .buttons {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* Ermöglicht das Umfließen der Buttons, falls der Platz nicht ausreicht */
+    flex-wrap: wrap;
   }
   .btn {
     display: inline-block;
@@ -37,7 +39,7 @@
     border: none;
     border-radius: 15px;
     box-shadow: 0 9px #d6d3d3;
-    transition: transform 0.2s; /* Sanfte Transition für die Transformation */
+    transition: transform 0.2s;
   }
   .btn:hover {background-color: #3e8e41}
   .btn:active {
@@ -84,10 +86,32 @@
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }
+
+  /* CSS für die Herzen */
+  .heart {
+    position: absolute;
+    top: -50px;
+    color: red;
+    font-size: 20px;
+    animation: fall linear infinite;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(100vh);
+    }
+  }
+
+  /* CSS für den Text "Moe & Zou" */
+  .signature {
+    font-size: 24px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-top: 20px;
+  }
 </style>
 </head>
 <body>
-
 
   <div class="access-container">
     <h2>Enter Access Code</h2>
@@ -95,17 +119,41 @@
     <button class="access-btn" onclick="checkCode()">Submit</button>
   </div>
 
-
-<div class="button-container">
-  <h1 id="headline"> Will you be my Valentine, Zou? </h1>
+  <div class="button-container">
+    <h1 id="headline"> Will you be my Valentine, Zou? </h1>
     <img id="rose_bear" src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Rose Bear">
     <div class="buttons">
         <button class="btn" id="yesButton">Yes</button>
         <button class="btn" id="noButton">No</button>
     </div>
-</div>
+  </div>
 
 <script>
+  const storedHash = "72f93cdffdd25a0cc5ed855d2388671b7e715ca09a8c844a90cb3e4e7398fc45";
+
+  // Funktion zum Hashen des Passworts
+  async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+
+  // Funktion zum Überprüfen des Codes
+  async function checkCode() {
+    const code = document.getElementById('accessCode').value;
+    const hashedCode = await hashPassword(code);
+
+    if (hashedCode === storedHash) {
+      document.querySelector('.button-container').style.display = 'flex';
+      document.querySelector('.access-container').style.display = 'none';
+    } else {
+      alert("Incorrect code!");
+    }
+  }
+
+  // Rest des JavaScript-Codes bleibt unverändert
   var buttonTexts = ["No", "Oh, wrong button","Are you sure?", "Really sure?", "Please think again", "Don't do this", "the Yes button is left", "Or...", "Yes 👀"];
   var index = 0;
   var scale = 2;
@@ -123,10 +171,7 @@
     document.getElementById('yesButton').style.transform = 'scale(' + scale + ')';
   };
 
-
-
   document.getElementById('yesButton').onclick = function () {
-
     var yesBtn = document.getElementById('yesButton');
     var noBtn = document.getElementById('noButton');
     var headline = document.getElementById('headline');
@@ -140,9 +185,7 @@
     YesEvent();
   }
 
-
   function YesEvent() {
-
     var yesBtn = document.getElementById('yesButton');
     var noBtn = document.getElementById('noButton');
     var headline = document.getElementById('headline');
@@ -154,18 +197,31 @@
     roseBear.style.display = "block";
 
     document.getElementById('rose_bear').src = "https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif";
-    document.getElementById('headline').textContent= "Happy Valentines day ❤️";
+    document.getElementById('headline').textContent= "❤️ Happy Valentines day ❤️";
+
+    // Fügt den Text "Moe & Zou" hinzu
+    const signature = document.createElement('div');
+    signature.classList.add('signature');
+    signature.textContent = 'Moe & Zou';
+    document.querySelector('.button-container').appendChild(signature);
+
+    startHearts(); // Startet den Regen aus Herzen nach dem Klicken auf "Ja"
   }
 
+  function startHearts() {
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+      document.querySelector('.button-container').appendChild(heart);
 
-  function checkCode() {
-    var code = document.getElementById('accessCode').value;
-    if(code === "0510") { // Ersetzen Sie "1234" durch Ihren gewünschten 4-stelligen Code
-      document.querySelector('.button-container').style.display = 'flex';
-      document.querySelector('.access-container').style.display = 'none';
-    } else {
-      alert("Incorrect code!");
-    }
+      // Entfernt das Herz, nachdem es den Boden erreicht hat
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
+    }, 300);
   }
 </script>
 
